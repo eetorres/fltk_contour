@@ -1,0 +1,39 @@
+// ========================================================================
+// fl_contour    5.3.1
+//
+// Copyrigth 2002 by Edmanuel Torres (eetorres@gmail.com)
+//
+// This widget is  free  software;  you  can  redistribute  it and/or
+// modify it  under  the  terms  of  the   GNU Library General Public
+// License  as  published  by  the  Free  Software Foundation; either
+// version 2 of the License,  or  (at your option)  any later version
+// or much better FLTK license, wich allow you static linking.
+//
+// This  library  is  distributed  in the hope that it will be useful,
+// but  WITHOUT ANY WARRANTY;  without  even  the  implied warranty of
+// MERCHANTABILITY  or FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
+// Library General Public License for more details.
+//
+// You should have  received a copy  of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Sent me suggestions, modifications or bugs. Don't hesitate to contact
+// me for any question, I will be very grateful with your feedbacks.
+// Get the last version at http://eetorres.googlepages.com/fltk_en
+//
+//========================================================================
+//
+// type: $ tar -xvzf fltk_contour_x.x.x.tar.gz
+// type: $ cd fltk_countour
+// type: $ make
+//
+// you will find a test program in the bin subdirectory
+// to run it just type ./contour in the comand line and <enter>
+//
+// Enjoy it...
+//                                           Edmanuel Torres
+//                                          eetorres@gmail.com
+// ========================================================================
+// NOTE: The input data is in XYZ plain text format.

@@ -1,0 +1,59 @@
+////////////////////////////////////////////////////
+- 10/01/2003
+first Release of Fltk_Contour
+
+- 11/01/2003
+lineal and nearest Improved
+
+Fixed bugs in colormap.
+
+- 25/04/2004
+OpenGl widget is totaly independent library
+
+- 16/11/2004
+The Fl_2D_Gl_Contour widget was proted to Linux.
+
+- 13/01/2005
+The Fl_2D_Gl_Contour widget, The Fl_3D_Gl_Contour widget.
+the demos running on Linux.
+
+- 20/08/2006
+code completely rewriten.
+working on optimization methods.
+
+- 23/08/2006
+the nearest neighbor interpolation improved.
+
+- 04/09/2006
+input data files comments supported
+color palettes supported.
+
+- 06/09/2006
+Fixed some problem loading input files.
+
+- 11/01/2007
+Just one class Fl_Gl_Contour for all.
+Horrible bug removed.
+Optimized code.
+
+- 02/02/2007
+graphics 2D and 3D are independent
+Submesh cuting and saving
+
+- 25/09/2007
+
+some bugs fixed
+
+- 20/03/2008
+
+improved interface
+load and save file chooser
+improved submesh cutting
+
+- 12/06/2009
+
+bugs fixed
+
+- 26/11/2011
+
+bug fixed in function eval_centroide of src/fl_contour.cxx

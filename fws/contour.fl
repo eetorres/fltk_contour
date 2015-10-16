@@ -1,0 +1,633 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {../test/contour.h} 
+code_name {../test/contour.cxx}
+decl {\#include <msmvtl/tmatrix.h>} {public local
+} 
+
+decl {TMatrix<gm_real> d;} {private local
+} 
+
+decl {const char * f;} {private local
+} 
+
+decl {char file_[128];} {private local
+} 
+
+decl {char file_name_[32];} {private local
+} 
+
+decl {char submesh_file_[128];} {private local
+} 
+
+decl {char submesh_file_name_[32];} {private local
+} 
+
+decl {char directory_[128];} {private local
+} 
+
+Function {} {open
+} {
+  code {// initialize variables
+  strcpy(file_name_,"noname.xyz");
+  strcpy(directory_,"./");} {}
+  Fl_Window _wcnt {
+    label Contour open
+    private xywh {331 210 770 510} type Double resizable
+    code0 {\#include <fl_gl_contour.h>} visible
+  } {
+    Fl_Box ct3 {
+      label {No hay OpenGL presente}
+      xywh {172 3 593 472} box THIN_DOWN_BOX resizable
+      code0 {//ct3->cntData(d);}
+      class fl_gl_contour
+    }
+    Fl_Group {} {open
+      xywh {5 480 760 25} box THIN_DOWN_BOX
+    } {
+      Fl_Slider sc {
+        label Scale
+        callback {ct3->scale(sc->value());
+ct3->redraw();}
+        xywh {631 485 130 12} type Horizontal align 4 step 0.02 value 1
+      }
+      Fl_Slider _z {
+        label Zoom
+        callback {ct3->zoom(_z->value());
+ct3->redraw();}
+        xywh {430 485 130 12} type Horizontal align 4 step 0.02 value 0.8
+      }
+    }
+    Fl_Group {} {open
+      xywh {5 5 166 470} box THIN_DOWN_BOX
+    } {
+      Fl_Group {} {open
+        xywh {10 6 157 49}
+      } {
+        Fl_Button {} {
+          label {@fileopen}
+          callback {//
+  Fl_File_Chooser *p = new Fl_File_Chooser(directory_,"*.xyz",1,"Select file");
+  p->directory(directory_);
+  p->show();
+  while( p->visible())
+	  Fl::wait();
+  if(p->value()){
+    strcpy(file_,p->value());
+    strcpy(directory_,p->directory());
+    f = fl_filename_name(p->value());
+    strcpy(file_name_,f);
+    _xyz_file->value(file_name_);
+    button_data->activate();
+  }} selected
+          tooltip {open a XYZ data file} xywh {13 7 43 28} box THIN_UP_BOX color 17 labelsize 19 labelcolor 51
+          code1 {\#include<string.h>}
+          code2 {\#include<FL/Fl_File_Chooser.H>}
+        }
+        Fl_Button button_data {
+          callback {//
+  load_xyz_data();
+  button_graph->activate();
+  control_panel->activate();}
+          tooltip {load data} image {../img/data.xpm} xywh {67 7 43 28} box THIN_UP_BOX color 26 deactivate
+        }
+        Fl_Button button_graph {
+          callback {//
+  _chk_cut->activate();
+  build_graph();}
+          tooltip {compute contourand color  maps} image {../img/contour.xpm} xywh {121 7 43 28} box THIN_UP_BOX color 3 align 16 deactivate
+        }
+        Fl_Input _xyz_file {
+          xywh {12 35 155 20}
+          code0 {_xyz_file->value("noname.xyz");}
+        }
+      }
+      Fl_Tabs control_panel {open
+        xywh {5 63 165 401} deactivate
+      } {
+        Fl_Group {} {
+          label Settings open
+          xywh {8 79 156 381}
+        } {
+          Fl_Group {} {open
+            xywh {8 84 151 87} box THIN_DOWN_BOX
+          } {
+            Fl_Choice ip {
+              label {Interpolation:}
+              callback {//
+  ct3->intp_method((int)ip->value());
+  //printf("interpolation = %i",ip->value());
+  ct3->graph_cb();}
+              tooltip {select interpolation} xywh {11 104 142 21} down_box BORDER_BOX align 5
+              code0 {o->value(0);}
+            } {
+              MenuItem {} {
+                label overall
+                callback {//
+  ct3->intp_method((int)ip->value());
+  //printf("val = %i",ip->value());
+  ct3->graph_cb();}
+                xywh {15 15 100 20}
+              }
+              MenuItem {} {
+                label nearest
+                callback {//
+  ct3->intp_method((int)ip->value());
+  //printf("val = %i",ip->value());
+  ct3->graph_cb();}
+                xywh {15 15 100 20}
+              }
+              MenuItem {} {
+                label Linear
+                callback {//
+  ct3->intp_method((int)ip->value());
+  //printf("val = %i",ip->value());
+  ct3->graph_cb();}
+                xywh {15 15 100 20}
+              }
+            }
+            Fl_Choice pt {
+              label {Palette:}
+              callback {//
+  //ct3->color_palette((int)pt->value());
+  //rintf("Palette = %i",(int)pt->value());
+  //ct3->graph_cb();} open
+              tooltip {select palette} xywh {11 144 142 20} down_box BORDER_BOX align 5
+              code0 {o->value(0);}
+            } {
+              MenuItem {} {
+                label Gray
+                callback {//
+  ct3->set_palette((int)pt->value());
+  //printf("Palette = %i",pt->value());
+  ct3->graph_cb();}
+                xywh {25 25 100 20}
+              }
+              MenuItem {} {
+                label Terrain
+                callback {//
+  ct3->set_palette((int)pt->value());
+  //printf("Palette = %i",pt->value());
+  ct3->graph_cb();}
+                xywh {35 35 100 20}
+              }
+              MenuItem {} {
+                label Earth
+                callback {//
+  ct3->set_palette((int)pt->value());
+  //printf("Palette = %i",pt->value());
+  ct3->graph_cb();}
+                xywh {55 55 100 20}
+              }
+              MenuItem {} {
+                label Hsv
+                callback {//
+  ct3->set_palette((int)pt->value());
+  //printf("Palette = %i",pt->value());
+  ct3->graph_cb();}
+                xywh {65 65 100 20}
+              }
+              MenuItem {} {
+                label Rgb
+                callback {//
+  ct3->set_palette((int)pt->value());
+  //printf("Palette = %i",pt->value());
+  ct3->graph_cb();}
+                xywh {75 75 100 20}
+              }
+            }
+          }
+          Fl_Group {} {
+            label Grid
+            xywh {8 190 151 30} box THIN_DOWN_BOX align 5
+          } {
+            Fl_Value_Input gx {
+              label {X:}
+              callback {ct3->set_number_x_grid((int)gx->value());
+ct3->actualize();}
+              tooltip {Grid on X direction} xywh {28 195 28 20} minimum 10 maximum 500 step 1 value 40
+            }
+            Fl_Value_Input gy {
+              label {Y:}
+              callback {ct3->set_number_y_grid((int)gy->value());
+ct3->actualize();}
+              tooltip {Grid on Y direction} xywh {77 195 28 20} minimum 10 maximum 500 step 1 value 40
+            }
+            Fl_Value_Input lv {
+              label {Z:}
+              callback {ct3->set_number_z_grid((int)lv->value());
+//ct3->actualize();}
+              tooltip {Grid on Z direction} xywh {125 195 28 20} minimum 10 maximum 500 step 1 value 30
+            }
+          }
+          Fl_Group {} {
+            label Display
+            xywh {8 236 151 47} box THIN_DOWN_BOX align 5
+          } {
+            Fl_Check_Button _bx_d {
+              label {Box  }
+              callback {//
+  ct3->graph_box((bool)_bx_d->value());
+  ct3->redraw();}
+              tooltip {Shows bounding box} xywh {16 241 65 20} down_box DOWN_BOX
+            }
+            Fl_Check_Button _ch_pl {
+              label Palette
+              callback {//
+  ct3->graph_pal((bool)_ch_pl->value());
+  ct3->redraw();}
+              tooltip {shows palette} xywh {82 241 65 20} down_box DOWN_BOX
+            }
+            Fl_Check_Button _ch_d {
+              label {Data }
+              callback {//
+  ct3->graph_dat((bool)_ch_d->value());
+  ct3->redraw();}
+              tooltip {shows loaded data points} xywh {16 261 65 20} down_box DOWN_BOX
+            }
+            Fl_Check_Button _ch_sp {
+              label Points
+              callback {//
+  ct3->graph_mpt((bool)_ch_sp->value());
+  ct3->redraw();}
+              tooltip {shiows interpolated points} xywh {82 261 65 20} down_box DOWN_BOX
+            }
+          }
+          Fl_Group {} {
+            label Graph
+            xywh {8 300 151 54} box THIN_DOWN_BOX align 5
+          } {
+            Fl_Check_Button _btt_2d {
+              label 2D
+              callback {//
+  if((bool)_btt_2d->value())
+    g2d->activate();
+  else g2d->deactivate();
+  ct3->graph_2d((bool)_btt_2d->value());
+  ct3->redraw();}
+              tooltip {shows 2D graph} xywh {15 305 41 20} down_box DOWN_BOX value 1
+            }
+            Fl_Check_Button _btt_3d {
+              label 3D
+              callback {//
+  if((bool)_btt_2d->value())
+    g3d->activate();
+  else g3d->deactivate();
+  ct3->graph_3d((bool)_btt_3d->value());
+  ct3->redraw();}
+              tooltip {shows 3D graph} xywh {15 330 41 20} down_box DOWN_BOX value 1
+            }
+            Fl_Choice g2d {
+              callback {//
+  ct3->graph_2d((int)g2d->value());
+  //printf("type = %i",g->value());
+  ct3->graph_cb();}
+              tooltip {select graph type} xywh {58 304 95 20} down_box BORDER_BOX align 5
+              code0 {o->value(0);}
+            } {
+              MenuItem {} {
+                label Mesh
+                xywh {25 25 100 20}
+              }
+              MenuItem {} {
+                label Contour
+                xywh {25 25 100 20}
+              }
+              MenuItem {} {
+                label Color
+                xywh {35 35 100 20}
+              }
+              MenuItem {} {
+                label {Contour-Color}
+                xywh {45 45 100 20}
+              }
+            }
+            Fl_Choice g3d {
+              callback {//
+  ct3->graph_3d((int)g3d->value());
+  //printf("type = %i",g->value());
+  ct3->graph_cb();}
+              tooltip {select graph type} xywh {58 328 95 20} down_box BORDER_BOX align 5
+              code0 {o->value(0);}
+            } {
+              MenuItem {} {
+                label Mesh
+                xywh {35 35 100 20}
+              }
+              MenuItem {} {
+                label Contour
+                xywh {35 35 100 20}
+              }
+              MenuItem {} {
+                label Color
+                xywh {45 45 100 20}
+              }
+              MenuItem {} {
+                label {Contour-Color}
+                xywh {55 55 100 20}
+              }
+            }
+          }
+          Fl_Group {} {
+            label Duplicate
+            xywh {8 372 151 53} box THIN_DOWN_BOX align 5
+          } {
+            Fl_Check_Button _chk_avg {
+              label Average
+              callback {//
+  ct3->actualize();
+  ct3->set_average_duplicated((bool)_chk_avg->value());
+  _chk_del->value(false);
+  ct3->set_remove_duplicated((bool)_chk_del->value());
+  //ct3->graph_cb();
+  //ct3->redraw();}
+              tooltip {Make and average with duplicate data} xywh {9 376 78 20} down_box DOWN_BOX value 1
+            }
+            Fl_Check_Button _chk_del {
+              label Delete
+              callback {//
+  ct3->actualize();
+  ct3->set_remove_duplicated((bool)_chk_del->value());
+  _chk_avg->value(false);
+  ct3->set_average_duplicated((bool)_chk_avg->value());
+  //ct3->graph_cb();
+  //ct3->redraw();}
+              tooltip {Remove duplicate data} xywh {89 376 63 20} down_box DOWN_BOX
+            }
+            Fl_Value_Input _tol {
+              label {tolerance:}
+              callback {//
+  ct3->actualize();
+  ct3->set_duplicated_tolerance((real)_tol->value());
+  ct3->redraw();}
+              tooltip {Tolerance radius} xywh {78 401 78 20} minimum 1e-09 maximum 1e+09 step 1e-06 value 0.001
+            }
+          }
+        }
+        Fl_Group {} {
+          label Mesh open
+          xywh {8 79 157 384} hide
+        } {
+          Fl_Group {} {
+            label {Mesh limits:}
+            xywh {11 102 153 133} box THIN_DOWN_BOX align 5
+          } {
+            Fl_Value_Input gx1 {
+              label {x1:}
+              callback {//ct3->numxcells((int)gx->value());
+//ct3->actualize();}
+              xywh {36 107 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input gy1 {
+              label {y1:}
+              callback {//ct3->numycells((int)gy->value());
+//ct3->actualize();}
+              xywh {36 127 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input gz1 {
+              label {z1:}
+              callback {//ct3->numlevels((int)lv->value());
+//ct3->actualize();}
+              xywh {36 147 125 20} minimum -1e+09 maximum 1e+09 step 0.001 deactivate
+            }
+            Fl_Value_Input gx2 {
+              label {x2:}
+              callback {//ct3->numxcells((int)gx->value());
+//ct3->actualize();}
+              xywh {36 170 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input gy2 {
+              label {y2:}
+              callback {//ct3->numycells((int)gy->value());
+//ct3->actualize();}
+              xywh {36 190 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input gz2 {
+              label {z2:}
+              callback {//ct3->numlevels((int)lv->value());
+//ct3->actualize();}
+              xywh {36 210 125 20} minimum -1e+09 maximum 1e+09 step 0.001 deactivate
+            }
+          }
+          Fl_Group {} {
+            xywh {10 236 155 21}
+          } {
+            Fl_Button {} {
+              label {@2>}
+              callback {//
+  cgx1->value((real)gx1->value());}
+              xywh {10 236 20 20}
+            }
+            Fl_Button {} {
+              label {@2>}
+              callback {//
+  cgy1->value((real)gy1->value());}
+              xywh {30 236 21 20}
+            }
+            Fl_Button {} {
+              label {@2>}
+              xywh {51 236 20 20} deactivate
+            }
+            Fl_Button {} {
+              label {@2>}
+              callback {//
+  cgx2->value((real)gx2->value());}
+              xywh {104 236 20 20}
+            }
+            Fl_Button {} {
+              label {@2>}
+              callback {//
+  cgy2->value((real)gy2->value());}
+              xywh {124 236 21 20}
+            }
+            Fl_Button {} {
+              label {@2>}
+              xywh {145 236 20 20} deactivate
+            }
+            Fl_Button {} {
+              label {@2>}
+              callback {//
+  cgx1->value((real)gx1->value());
+  cgy1->value((real)gy1->value());
+  cgx2->value((real)gx2->value());
+  cgy2->value((real)gy2->value());}
+              xywh {72 236 29 20}
+            }
+          }
+          Fl_Group _sm_lm {
+            label {Submesh:}
+            xywh {11 273 153 170} box THIN_DOWN_BOX align 5 deactivate
+          } {
+            Fl_Value_Input cgx1 {
+              label {x1:}
+              callback {//
+  ct3->set_submesh_limits(0,0,(real)cgx1->value());
+  
+  if((bool)_chk_rf->value()){
+    ct3->normalize_submesh_limits();
+    ct3->graph_cb();
+  }}
+              xywh {36 279 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input cgy1 {
+              label {y1:}
+              callback {//
+  ct3->set_submesh_limits(1,0,(real)cgy1->value());
+  
+  if((bool)_chk_rf->value()){
+    ct3->normalize_submesh_limits();
+    ct3->graph_cb();
+  }}
+              xywh {36 299 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input {} {
+              label {z1:}
+              callback {//ct3->numlevels((int)lv->value());
+//ct3->actualize();}
+              xywh {36 319 125 20} minimum -1e+09 maximum 1e+09 step 0.001 deactivate
+            }
+            Fl_Value_Input cgx2 {
+              label {x2:}
+              callback {//
+  ct3->set_submesh_limits(0,1,(real)cgx2->value());
+  
+  if((bool)_chk_rf->value()){
+    ct3->normalize_submesh_limits();
+    ct3->graph_cb();
+  }}
+              xywh {36 342 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input cgy2 {
+              label {y2:}
+              callback {//
+  ct3->set_submesh_limits(1,1,(real)cgy2->value());
+  
+  if((bool)_chk_rf->value()){
+    ct3->normalize_submesh_limits();
+    ct3->graph_cb();
+  }}
+              xywh {36 362 125 20} minimum -1e+09 maximum 1e+09 step 0.001
+            }
+            Fl_Value_Input {} {
+              label {z2:}
+              callback {//ct3->numlevels((int)lv->value());
+//ct3->actualize();}
+              xywh {36 382 125 20} minimum -1e+09 maximum 1e+09 step 0.001 deactivate
+            }
+            Fl_Button {} {
+              callback {//
+  ct3->set_submesh_limits(0,0,(real)cgx1->value());
+  ct3->set_submesh_limits(0,1,(real)cgx2->value());
+  ct3->set_submesh_limits(1,0,(real)cgy1->value());
+  ct3->set_submesh_limits(1,1,(real)cgy2->value());
+  ct3->normalize_submesh_limits();
+  _save_as->activate();
+  ct3->graph_cb();}
+              tooltip {cut submesh} image {../img/submesh.xpm} xywh {15 410 43 28} box THIN_UP_BOX
+            }
+            Fl_Button _save_as {
+              label {@filesaveas}
+              callback {// Save a XYZ file
+  //char * file_;
+  Fl_File_Chooser *p = new Fl_File_Chooser(directory_,"*.xyz",2,"Save file as");
+  p->directory(directory_);
+  p->show();
+  while( p->visible())
+     Fl::wait();
+  if(p->value()){
+    //file_ = (char*)p->value();
+    //cout<<"File Name = "<<file_<<endl;
+    strcpy(submesh_file_,(char*)p->value());
+    strcpy(directory_,(char*)p->directory());
+    f = (char*)fl_filename_name(p->value());
+    strcpy(submesh_file_name_,(char*)f);
+    //
+    cout<<"File Name = "<<submesh_file_<<endl;
+    cout<<"Dir Name = "<<directory_<<endl;
+    ct3->save_xyz_submesh(submesh_file_);
+    rs->activate();
+  }}
+              tooltip {Save highlighted the submesh} xywh {66 410 43 28} box THIN_UP_BOX color 26 deactivate
+            }
+            Fl_Button rs {
+              label {@reload}
+              callback {// Load the actual submesh
+  strcpy(file_,submesh_file_);
+  strcpy(file_name_,submesh_file_name_);
+  load_xyz_data();
+  build_graph();}
+              tooltip {load the new submesh} xywh {117 410 42 28} box THIN_UP_BOX color 26 labelsize 20 labelcolor 239 deactivate
+            }
+          }
+          Fl_Group {} {open
+            xywh {10 438 155 25}
+          } {
+            Fl_Check_Button _chk_cut {
+              label Submesh
+              callback {//
+  if((bool)_chk_cut->value()){
+    _sm_lm->activate();
+    ct3->graph_cut((bool)_chk_cut->value());
+    ct3->graph_cb();
+  }else{
+    _sm_lm->deactivate();
+    ct3->graph_cut((bool)_chk_cut->value());
+  }
+  //ct3->redraw();}
+              tooltip {Display cutting limits} xywh {10 442 80 20} down_box DOWN_BOX deactivate
+            }
+            Fl_Check_Button _chk_rf {
+              label Refresh
+              tooltip {Display and refresh cutting limits automaticly} xywh {92 443 70 20} down_box DOWN_BOX
+            }
+          }
+        }
+        Fl_Group {} {
+          label Color open
+          xywh {8 79 156 381} hide
+        } {}
+      }
+      Fl_Group {} {
+        xywh {5 467 166 5} resizable
+      } {}
+    }
+  }
+} 
+
+Function {load_xyz_data()} {open
+} {
+  code {//
+  char _title[256];
+  d.clear();
+  d.read_file((char*)file_,0,0);
+  ct3->set_input_data(d);
+  ct3->actualize();
+  
+  // Name bar
+  sprintf(_title,"Contour - %s",file_name_);
+  _wcnt->label(_title);
+  
+  gx1->value(ct3->get_x_min());
+  gx2->value(ct3->get_x_max());
+  gy1->value(ct3->get_y_min());
+  gy2->value(ct3->get_y_max());
+  gz1->value(ct3->get_z_min());
+  gz2->value(ct3->get_z_max());
+  
+  cgx1->value(ct3->get_x_min());
+  cgx2->value(ct3->get_x_max());
+  cgy1->value(ct3->get_y_min());
+  cgy2->value(ct3->get_y_max());
+  //cgz1->value(ct3->get_z_min());
+  //cgz2->value(ct3->get_z_max());} {}
+} 
+
+Function {build_graph()} {open
+} {
+  code {//
+//
+  ct3->set_number_x_grid((int)gx->value());
+  ct3->set_number_y_grid((int)gy->value());
+  ct3->set_number_z_grid((int)lv->value());
+  ct3->graph_cb();} {}
+} 

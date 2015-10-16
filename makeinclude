@@ -1,0 +1,46 @@
+
+CXX = g++
+
+PRGS = contour
+SCRS = fl_gl_contour.cxx fl_contour.cxx fl_palette.cxx
+OBJS = $(SCRS:.cxx=.o)
+
+
+MDIR = $(shell sh -c pwd)
+IDIR = -I../ -I../include
+SDIR = $(MDIR)/../src/
+ODIR = $(MDIR)/../obj/
+XDIR = $(MDIR)/../bin/
+TDIR = $(MDIR)/../test/
+DIRS = src test bin obj
+
+OPTIM  = -O2 -Wall -Wno-deprecated
+LMATH = -lm
+
+########################################################
+# add libraries for your system
+
+LX11R =
+
+# openSUSE 32bits system use:
+#LX11R = -L -lGLU -lGL -lXext -lX11 -lXft -lXinerama
+
+# Ubuntu 64bits system use:
+#LX11R = -L /usr/X11R6/lib64 -lGLU -lGL -lXext -lX11
+
+# 32bits system use:
+#LX11R = -L /usr/X11R6/lib -lGLU -lGL -lXext -lX11
+
+# for other system you must find the correct path...!
+########################################################
+
+# Fltk libraries
+LFLTK = $(shell fltk-config  --use-gl --ldstaticflags)
+
+CFLAGS = $(OPTIM) -c
+LFLAGS = $(LFLTK) $(LX11R)
+
+.SUFFIXES:	.cxx .o .h
+
+.cxx.o:
+	$(CXX) $(CFLAGS) $< -o $(ODIR)$@ $(IDIR)
