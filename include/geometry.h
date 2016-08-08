@@ -31,7 +31,8 @@
 #ifndef _GEOMETRY_H_
 #define _GEOMETRY_H_
 
-
+#include <stdlib.h>
+#include <math.h>
 #include <float.h>
 #include <vector>
 #include <iostream>
